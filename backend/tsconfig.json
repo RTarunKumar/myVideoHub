@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2016", //javascript version
+    "module": "commonjs", //this modules used for import and export
+    "strict": true, //stricness
+    "esModuleInterop": true, //latest
+    "skipLibCheck": true, //checks types for every library
+    "forceConsistentCasingInFileNames": true, //files proper convention naming
+    "outDir": "./dist", //for production will goto dist=> javascript and typescript in development
+    "rootDir": "./src", //every code inside here
+    "typeRoots": ["./src/types", "node_modules/@types"],
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
