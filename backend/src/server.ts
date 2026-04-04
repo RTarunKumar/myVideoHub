@@ -1,12 +1,16 @@
 import  express  from "express";
+import connectDB from "./config/db";
 import dotenv from 'dotenv'
 
-dotenv.config()
-const app = express()
-const PORT = process.env.PORT
+import passportJwtStretegy from './config/passportJwtStrategy'
 
-import connectDB from "./config/db";
+const app = express()
+dotenv.config()
 connectDB()
+
+app.use(passportJwtStretegy.initialize())
+
+const PORT = process.env.PORT
 
 import routes from "./Routes/router";
 app.use(express.json())
