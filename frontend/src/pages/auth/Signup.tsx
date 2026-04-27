@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import Layout from '../../Components/Layout'
 import type { AuthFormData } from '../../types'
+import { useDispatch } from 'react-redux'
+import { signUpUser } from '../../reducers/auth/authReducer'
+import type { AppDispatch } from '../../reducers/auth/store'
 
 
 const Signup:React.FC = () => {
@@ -8,6 +11,9 @@ const Signup:React.FC = () => {
         email:'',
         password:''
     })
+
+    //in TS all async type should always have type
+    const dispatch = useDispatch<AppDispatch>()
 
     const handleOnchange=(e: React.ChangeEvent<HTMLInputElement>)=>{
         const {name, value} = e.target
@@ -19,6 +25,7 @@ const Signup:React.FC = () => {
 
     const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
+        dispatch(signUpUser(formData))
     }
   return <Layout>
         <div className='flex items-center justify-center p-4 w-full'>

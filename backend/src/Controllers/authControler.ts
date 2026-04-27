@@ -41,7 +41,7 @@ export const loginUser : RequestHandler = async (req:RegisterReg, res) => {
     const matchPassword = await compareHashedPassword(password, user.password)
     if(!matchPassword) return sendResponse(res, 400, false, 'Password doesnt match')
     const jwtToken  = await generateJwtToken(user)   
-    return sendResponse(res, 200, true, 'LoggedIn', {user:jwtToken})
+    return sendResponse(res, 200, true, 'LoggedIn Successfully', {user:{token: jwtToken}})
   } catch (error) {
     console.error(error)
     return sendResponse(res, 500, false, 'Internal server error')

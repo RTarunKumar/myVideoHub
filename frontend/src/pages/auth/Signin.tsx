@@ -2,9 +2,14 @@ import React, { useState } from 'react'
 import Layout from '../../Components/Layout'
 import { Link } from 'react-router-dom'
 import type { AuthFormData } from '../../types'
+import { useDispatch } from 'react-redux'
+import type { AppDispatch } from '../../reducers/auth/store'
+import { signInUser } from '../../reducers/auth/authReducer'
 
 
 const SignIn:React.FC = () => {
+
+    const dispatch = useDispatch<AppDispatch>()
 
     const [formData, setFormData] = useState<AuthFormData>({
         email:'',
@@ -21,6 +26,8 @@ const SignIn:React.FC = () => {
 
     const handleSubmit = (e:React.ChangeEvent<HTMLFormElement>) =>{
         e.preventDefault()
+        const {email, password} = formData
+        dispatch(signInUser({email, password}))
     }
     
   return <Layout>

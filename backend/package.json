@@ -12,6 +12,7 @@
   "description": "",
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/passport": "^1.0.17",
     "@types/passport-jwt": "^4.0.1",

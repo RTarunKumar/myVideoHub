@@ -1,6 +1,7 @@
 import  express  from "express";
 import connectDB from "./config/db";
 import dotenv from 'dotenv'
+import cors from 'cors'
 
 import passportJwtStretegy from './config/passportJwtStrategy'
 
@@ -9,8 +10,13 @@ dotenv.config()
 connectDB()
 
 app.use(passportJwtStretegy.initialize())
+const corsOptions = {
+    origin:['http://localhost:5173'],
+    optionsSuccessStatus: 200,
+}
+app.use(cors(corsOptions))
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 8000
 
 import routes from "./Routes/router";
 app.use(express.json())
