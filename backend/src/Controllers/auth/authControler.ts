@@ -1,9 +1,9 @@
 import { Request, RequestHandler } from "express"
-import User from "../model/userSchema"
-import { sendResponse } from "../Utils/sendResponse"
+import User from "../../model/userSchema"
+import { sendResponse } from "../../Utils/sendResponse"
 import crypto from 'crypto'
-import { compareHashedPassword, hashPassword } from "../Utils/passwordHelper"
-import { generateJwtToken } from "../Utils/generateJwtToken"
+import { compareHashedPassword, hashPassword } from "../../Utils/passwordHelper"
+import { generateJwtToken } from "../../Utils/generateJwtToken"
 
 interface RegisterReg extends Request{
     body:{

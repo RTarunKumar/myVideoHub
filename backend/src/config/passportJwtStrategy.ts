@@ -1,23 +1,41 @@
-import dotenv from 'dotenv'
-import passport from 'passport'
-import { Strategy as JWT, ExtractJwt, StrategyOptions } from 'passport-jwt'
-import User from '../model/userSchema'
+import dotenv from "dotenv";
+import passport from "passport";
+import { Strategy as JWT, ExtractJwt, StrategyOptions } from "passport-jwt";
+import User from "../model/userSchema";
+import { Request, RequestHandler } from "express";
+import { Types } from "mongoose";
 
-dotenv.config()
+dotenv.config();
 
-const opts : StrategyOptions = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.JWT_SECRET_KEY as string
+export interface AuthenticatedRequest extends Request {
+  user: {
+    _id: Types.ObjectId;
+  };
 }
 
-passport.use(new JWT(opts, async(jwtPayload, middleware)=>{
-    try {
-        const user = await User.findById(jwtPayload._id).select('.password')
-        if(!user) middleware(null, false) //takes error and user
-        return middleware(null, user)
-    } catch (error) {
-        console.error(error)
-    }
-}))
+export type AuthenticatedRequestHandler = RequestHandler<
+  any,
+  any,
+  any,
+  any,
+  AuthenticatedRequest
+>;
 
-export default passport
+const opts: StrategyOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET_KEY as string,
+};
+
+passport.use(
+  new JWT(opts, async (jwtPayload, middleware) => {
+    try {
+      const user = await User.findById(jwtPayload._id).select("-password");
+      if (!user) middleware(null, false); //takes error and user
+      return middleware(null, user);
+    } catch (error) {
+      console.error(error);
+    }
+  }),
+);
+
+export default passport;
