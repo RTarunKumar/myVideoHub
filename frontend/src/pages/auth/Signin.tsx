@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import Layout from '../../Components/Layout'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { AuthFormData } from '../../types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch } from '../../reducers/auth/store'
-import { signInUser } from '../../reducers/auth/authReducer'
+import { selectLoading, signInUser } from '../../reducers/auth/authReducer'
 
 
 const SignIn:React.FC = () => {
 
     const dispatch = useDispatch<AppDispatch>()
+    const navigate = useNavigate()
+    const loading = useSelector(selectLoading)
 
     const [formData, setFormData] = useState<AuthFormData>({
         email:'',
@@ -27,7 +29,7 @@ const SignIn:React.FC = () => {
     const handleSubmit = (e:React.ChangeEvent<HTMLFormElement>) =>{
         e.preventDefault()
         const {email, password} = formData
-        dispatch(signInUser({email, password}))
+        dispatch(signInUser({email, password, navigate}))
     }
     
   return <Layout>
@@ -66,9 +68,10 @@ const SignIn:React.FC = () => {
                         />
                     </div>
                     <button 
+                    disabled={loading}
                     type='submit'
-                    className='mt-1 block w-full px-4 bg-green-500 text-white fobt-bold rounded-md shadow-md transition duration-300 disabled:bg-green-300 disabled:cursor-not-allowed flex items-center justify-center'
-                    >SignIn</button>
+                    className={'mt-1 block w-full px-4 bg-green-500 text-white fobt-bold rounded-md shadow-md transition duration-300 disabled:bg-green-300 disabled:cursor-not-allowed flex items-center justify-center'}
+                    >{loading ? 'Verifying...' : 'Sign-In'}</button>
                 </form>
                 <Link 
                 to={'/sign-up'}
