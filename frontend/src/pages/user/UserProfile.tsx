@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../../Components/Sidebar'
-import { useSelector } from 'react-redux'
-import { slelectLoggedInUser } from '../../reducers/auth/authReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { slelectLoggedInUser, updateUser, type AuthResponse } from '../../reducers/auth/authReducer'
+import backendApi from '../../api/backendApi'
+import { toast } from 'sonner'
+import { useConfigHook } from '../../CustomHook/useConfigHook'
+// import type { AppDispatch } from '../../reducers/auth/store'
 
 const UserProfile: React.FC = () => {
 
@@ -9,6 +13,33 @@ const UserProfile: React.FC = () => {
   const [name, setName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [edit, setEdit] = useState<boolean>(false)
+
+  // const dispatch = useDispatch<AppDispatch>() //for Asynchronus action.
+  const dispatch = useDispatch() //Synch no need AppDispatch
+  const {configWithJWT} = useConfigHook()
+
+  const handleEditClick = () =>{
+    setEdit((prev)=> !prev)
+  }
+
+  const handleSaveClick = async()=>{
+    try {
+      const {data} = await backendApi.post<AuthResponse>(
+        'api/v1/user/update',
+        {name, email},
+        configWithJWT
+      )  
+      if(data.success){
+        toast.success(data.message)
+        dispatch(updateUser({email, name}))
+        setEdit(false)
+      }else{
+        toast.warning(data.message)
+      }
+    } catch (error) {
+      toast.error('Iternal server error')
+    }
+  }
 
   useEffect(()=>{
     if(loggedInUser?.name)setName(loggedInUser.name)
@@ -63,7 +94,7 @@ const UserProfile: React.FC = () => {
               </div>
             </div>
             <div className='justify-end'>
-              <button type='button' onClick={()=>setEdit(!edit)}>
+              <button type='button' onClick={()=>edit ? handleSaveClick() : handleEditClick()}>
                 {edit? 'Save' : 'Edit'}
               </button>
             </div>
