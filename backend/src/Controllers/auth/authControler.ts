@@ -80,6 +80,7 @@ export const updatePassword : RequestHandler = async(req, res)=>{
         }
         const hashedPassword = await hashPassword(password)
         user.password = hashedPassword
+        user.token = crypto.randomBytes(16).toString('hex')
         await user.save()
         return sendResponse(res, 200, true, 'Password reset successfully')
     } catch (error) {

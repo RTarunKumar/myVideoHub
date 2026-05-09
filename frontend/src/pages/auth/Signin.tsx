@@ -67,6 +67,14 @@ const SignIn:React.FC = () => {
                         className='mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm'
                         />
                     </div>
+                    <div>
+                        <Link
+                        to="/reset-password"
+                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                        >
+                        Forgot your password?
+                        </Link>
+                    </div>
                     <button 
                     disabled={loading}
                     type='submit'
